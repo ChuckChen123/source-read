@@ -104,6 +104,9 @@ public class ExtensionLoader<T> {
 
     private final ExtensionFactory objectFactory;
 
+    /**
+     * 多扩展名，存储扩展类和名字映射关系的 map
+     */
     private final ConcurrentMap<Class<?>, String> cachedNames = new ConcurrentHashMap<>();
 
     /**
@@ -133,7 +136,7 @@ public class ExtensionLoader<T> {
     private Set<String> unacceptableExceptions = new ConcurrentHashSet<>();
 
     /**
-     * TODO LoadingStrategy
+     * LoadingStrategy 可以增加扫描的文件路径
      */
     private static volatile LoadingStrategy[] strategies = loadLoadingStrategies();
 
@@ -474,10 +477,18 @@ public class ExtensionLoader<T> {
         return getExtension(name, true);
     }
 
+    /**
+     * 获取指定扩展
+     * @param name 扩展名
+     * @param wrap 是否需要 wrap 扩展
+     * @return
+     */
     public T getExtension(String name, boolean wrap) {
         if (StringUtils.isEmpty(name)) {
             throw new IllegalArgumentException("Extension name == null");
         }
+
+        // name 为 true 的时候是直接获取默认扩展的
         if ("true".equals(name)) {
             return getDefaultExtension();
         }
@@ -518,6 +529,7 @@ public class ExtensionLoader<T> {
     }
 
     /**
+     * 获取默认的扩展
      * Return default extension, return <code>null</code> if it's not configured.
      */
     public T getDefaultExtension() {
@@ -846,6 +858,10 @@ public class ExtensionLoader<T> {
         return getExtensionClasses().get(name);
     }
 
+    /**
+     * 获取扩展 class，如果没有加载则先加载 class，再返回 class
+     * @return
+     */
     private Map<String, Class<?>> getExtensionClasses() {
         Map<String, Class<?>> classes = cachedClasses.get();
         if (classes == null) {
@@ -1066,11 +1082,16 @@ public class ExtensionLoader<T> {
                 }
             }
 
+            // Dubbo 的 SPI 配置文件中支持多 key，也就是一个扩展可以叫多个名字
             String[] names = NAME_SEPARATOR.split(name);
             if (ArrayUtils.isNotEmpty(names)) {
+                // 判断第一个名字是不是默认扩展
                 cacheActivateClass(clazz, names[0]);
                 for (String n : names) {
+                    // 但还是会将其他的名字存储起来
+                    // 这里其实只存了一个名字，也就是排在第一位的名字
                     cacheName(clazz, n);
+                    // 如果 override 为 true，就会将所有的名字都保存到 extensionClasses 中
                     saveInExtensionClass(extensionClasses, clazz, n, overridden);
                 }
             }

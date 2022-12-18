@@ -1,2 +1,3 @@
 boy=org.apache.dubbo.learn.Boy
 g,girl,gl=org.apache.dubbo.learn.Girl
+adaptive=org.apache.dubbo.learn.Boy

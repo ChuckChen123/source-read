@@ -1085,7 +1085,8 @@ public class ExtensionLoader<T> {
             // Dubbo 的 SPI 配置文件中支持多 key，也就是一个扩展可以叫多个名字
             String[] names = NAME_SEPARATOR.split(name);
             if (ArrayUtils.isNotEmpty(names)) {
-                // 判断第一个名字是不是默认扩展
+                // 判断第一个名字是不是要激活的扩展
+                // 如果是则加入激活扩展 map
                 cacheActivateClass(clazz, names[0]);
                 for (String n : names) {
                     // 但还是会将其他的名字存储起来

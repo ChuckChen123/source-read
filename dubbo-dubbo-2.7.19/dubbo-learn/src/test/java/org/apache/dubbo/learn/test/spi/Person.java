@@ -1,11 +1,14 @@
-package org.apache.dubbo.learn;
+package org.apache.dubbo.learn.test.spi;
 
+import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.extension.Adaptive;
 import org.apache.dubbo.common.extension.SPI;
 
 @SPI("girl")
 public interface Person {
 
-    @Adaptive("adaptive")
     String sayHi();
+
+    @Adaptive
+    void testAdaptive(URL url);
 }

@@ -17,6 +17,12 @@
             <version>2.7.19</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-rpc-api</artifactId>
+            <version>2.7.19</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <properties>

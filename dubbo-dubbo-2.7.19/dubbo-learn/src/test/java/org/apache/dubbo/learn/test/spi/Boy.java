@@ -1,4 +1,6 @@
-package org.apache.dubbo.learn;
+package org.apache.dubbo.learn.test.spi;
+
+import org.apache.dubbo.common.URL;
 
 public class Boy implements Person {
 
@@ -11,5 +13,10 @@ public class Boy implements Person {
     @Override
     public String sayHi() {
         return "我是李雷, " + person.sayHi();
+    }
+
+    @Override
+    public void testAdaptive(URL url) {
+
     }
 }
